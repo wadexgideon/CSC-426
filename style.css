@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --paper: #F4EFE1;
+  --panel: #FFFFFF;
+  --spine: #1F3A2E;
+  --spine-soft: #4C6259;
+  --line: #DDD5BE;
+  --brass: #B6842A;
+  --rust: #A83E29;
+  --teal: #276B5A;
+  --ink: #24301F;
+  --ink-soft: #5B6555;
+  --shadow: 0 3px 14px rgba(31, 58, 46, 0.10);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2 { font-family: 'Fraunces', serif; color: var(--spine); margin: 0 0 6px; font-weight: 600; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 36px;
+  background: var(--spine);
+  color: var(--paper);
+}
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand-name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.4rem; letter-spacing: 0.01em; }
+.brand-tag { color: #C9CFC4; font-size: 0.82rem; font-style: italic; }
+
+#app { flex: 1; max-width: 920px; margin: 0 auto; padding: 44px 24px 64px; width: 100%; }
+
+.view { display: none; }
+.view.active { display: block; animation: rise 0.22s ease; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.lede { color: var(--ink-soft); margin-top: 0; }
+
+.role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+
+.role-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--role-color, var(--brass));
+  border-radius: 6px;
+  padding: 24px 20px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease;
+  font-family: inherit;
+}
+.role-card:hover { transform: translateY(-3px); }
+.role-card:focus-visible { outline: 3px solid var(--brass); outline-offset: 2px; }
+.role-card h2 { font-size: 1.1rem; }
+.role-card p { color: var(--ink-soft); font-size: 0.88rem; margin: 6px 0 0; }
+
+.back-btn {
+  background: none; border: none; color: var(--ink-soft); cursor: pointer;
+  font-size: 0.88rem; padding: 0; margin-bottom: 20px; font-family: 'Space Mono', monospace;
+}
+.back-btn:hover { color: var(--spine); text-decoration: underline; }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 26px;
+  box-shadow: var(--shadow);
+  max-width: 480px;
+}
+.panel.wide { max-width: none; }
+
+form label { display: block; font-size: 0.84rem; color: var(--ink-soft); margin-bottom: 15px; font-weight: 500; }
+
+input, select, textarea {
+  display: block; width: 100%; margin-top: 6px; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: 4px; font-size: 0.95rem;
+  font-family: 'Inter', sans-serif; color: var(--ink); background: var(--paper);
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--brass); outline-offset: 1px; }
+
+.primary-btn {
+  background: var(--spine); color: #fff; border: none; padding: 11px 22px;
+  border-radius: 4px; cursor: pointer; font-size: 0.94rem; font-weight: 600; font-family: 'Inter', sans-serif;
+}
+.primary-btn:hover { background: var(--teal); }
+
+.switch-line { font-size: 0.85rem; color: var(--ink-soft); margin: 15px 0 0; }
+.switch-line a { color: var(--teal); }
+.hint { font-size: 0.8rem; color: var(--ink-soft); margin-top: 12px; font-family: 'Space Mono', monospace; }
+
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+@media (max-width: 720px) {
+  .role-grid { grid-template-columns: 1fr; }
+  .dash-grid { grid-template-columns: 1fr; }
+}
+
+.report-list { display: flex; flex-direction: column; gap: 12px; max-height: 440px; overflow-y: auto; }
+.report-list.wide { max-height: none; }
+
+.report-card { border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; background: var(--paper); }
+.report-card h3 { margin: 0 0 4px; font-size: 0.98rem; font-family: 'Fraunces', serif; color: var(--ink); font-weight: 600; }
+.report-card p { margin: 4px 0 0; font-size: 0.85rem; color: var(--ink-soft); }
+
+.report-meta { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+
+.tag {
+  font-size: 0.68rem; font-weight: 600; padding: 3px 10px; border-radius: 3px;
+  background: #E9E3D0; color: var(--spine); text-transform: uppercase; letter-spacing: 0.04em;
+  font-family: 'Space Mono', monospace;
+}
+
+/* signature element: rubber-stamp status badges */
+.stamp {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 74px; height: 74px; border-radius: 50%;
+  border: 2px solid currentColor; transform: rotate(-6deg);
+  font-family: 'Space Mono', monospace; font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.03em; text-align: center; line-height: 1.15;
+  position: relative;
+}
+.stamp::before {
+  content: ""; position: absolute; inset: 5px; border: 1px solid currentColor; border-radius: 50%;
+}
+.stamp.Open { color: var(--rust); }
+.stamp.In-Review { color: var(--brass); }
+.stamp.Resolved { color: var(--teal); }
+.stamp-sm {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 52px; height: 52px; font-size: 0.52rem;
+}
+
+.admin-controls { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+.admin-controls select { width: auto; padding: 6px 8px; font-size: 0.8rem; margin: 0; }
+
+.small-btn {
+  background: none; border: 1px solid var(--rust); color: var(--rust); border-radius: 4px;
+  padding: 6px 10px; font-size: 0.8rem; cursor: pointer; font-family: 'Inter', sans-serif;
+}
+.small-btn:hover { background: var(--rust); color: #fff; }
+
+.admin-stats { display: flex; gap: 16px; margin: 22px 0 28px; flex-wrap: wrap; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 16px 22px; box-shadow: var(--shadow); }
+.stat .num { font-family: 'Fraunces', serif; font-size: 1.7rem; font-weight: 600; display: block; color: var(--spine); }
+.stat .lbl { font-size: 0.76rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Space Mono', monospace; }
+
+.empty-state { color: var(--ink-soft); font-size: 0.9rem; font-style: italic; padding: 22px 0; }
+
+.foot { text-align: center; padding: 18px; color: var(--ink-soft); font-size: 0.76rem; border-top: 1px solid var(--line); font-family: 'Space Mono', monospace; }

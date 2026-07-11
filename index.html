@@ -1,339 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CSC426 Practical Works</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: linear-gradient(135deg, #0a1628 0%, #1a3a6b 50%, #0d2447 100%);
-      min-height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px 20px;
-    }
-
-    h1 {
-      color: #e8f4fd;
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      margin-bottom: 30px;
-      text-shadow: 0 2px 10px rgba(100,180,255,0.4);
-      text-align: center;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(100,180,255,0.25);
-      border-radius: 16px;
-      padding: 24px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    }
-
-    .card-title {
-      color: #64b4ff;
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      border-bottom: 1px solid rgba(100,180,255,0.3);
-      padding-bottom: 12px;
-      margin-bottom: 20px;
-    }
-
-    /* ===== CALCULATOR ===== */
-    #display {
-      background: rgba(0,0,0,0.4);
-      border: 1px solid rgba(100,180,255,0.2);
-      border-radius: 10px;
-      color: #e8f4fd;
-      font-size: 2rem;
-      text-align: right;
-      padding: 14px 16px;
-      margin-bottom: 16px;
-      word-break: break-all;
-      min-height: 60px;
-    }
-
-    .calc-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
-    .btn {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(100,180,255,0.2);
-      border-radius: 10px;
-      color: #e8f4fd;
-      font-size: 1.1rem;
-      font-weight: 600;
-      padding: 16px 0;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-    }
-
-    .btn:hover { background: rgba(100,180,255,0.2); transform: scale(1.04); }
-    .btn:active { transform: scale(0.97); }
-
-    .btn.op { color: #64b4ff; }
-    .btn.clear { background: rgba(220,60,60,0.2); color: #ff7b7b; border-color: rgba(220,60,60,0.3); }
-    .btn.equal { background: rgba(30,120,220,0.5); color: #fff; border-color: #3b82f6; grid-column: span 2; }
-    .btn.zero { grid-column: span 1; }
-
-    /* ===== LOGIN ===== */
-    .form-group { margin-bottom: 18px; }
-
-    .form-group label {
-      display: block;
-      color: #a0c8f0;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      letter-spacing: 0.5px;
-    }
-
-    .form-group input {
-      width: 100%;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(100,180,255,0.25);
-      border-radius: 8px;
-      color: #e8f4fd;
-      font-size: 0.95rem;
-      padding: 12px 14px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-group input::placeholder { color: rgba(200,220,255,0.35); }
-    .form-group input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
-    .form-group input.error { border-color: #f87171; }
-
-    .error-msg {
-      color: #f87171;
-      font-size: 0.78rem;
-      margin-top: 4px;
-      display: none;
-    }
-
-    .btn-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 6px;
-    }
-
-    .btn-login {
-      background: linear-gradient(135deg, #1d4ed8, #2563eb);
-      border: none;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 13px;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.1s;
-    }
-    .btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
-
-    .btn-reset {
-      background: transparent;
-      border: 1px solid rgba(100,180,255,0.3);
-      border-radius: 8px;
-      color: #a0c8f0;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 13px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-reset:hover { background: rgba(100,180,255,0.1); }
-
-    .alert {
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      padding: 12px 14px;
-      margin-top: 14px;
-      display: none;
-    }
-    .alert.success { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
-    .alert.fail    { background: rgba(239,68,68,0.15);  border: 1px solid rgba(239,68,68,0.4);  color: #fca5a5; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResolveHub — Student &amp; Community Issue Reporting</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>CSC426 Practical Works</h1>
-
-<div class="container">
-
-  <!-- TASK 1: CALCULATOR -->
-  <div class="card">
-    <div class="card-title">Task 1 — Calculator</div>
-    <div id="display">0</div>
-    <div class="calc-grid">
-      <button class="btn clear"   onclick="calcClear()">C</button>
-      <button class="btn op"      onclick="calcInput('%')">%</button>
-      <button class="btn op"      onclick="calcInput('^')">^</button>
-      <button class="btn op"      onclick="calcInput('÷')">÷</button>
-
-      <button class="btn"         onclick="calcInput('7')">7</button>
-      <button class="btn"         onclick="calcInput('8')">8</button>
-      <button class="btn"         onclick="calcInput('9')">9</button>
-      <button class="btn op"      onclick="calcInput('×')">×</button>
-
-      <button class="btn"         onclick="calcInput('4')">4</button>
-      <button class="btn"         onclick="calcInput('5')">5</button>
-      <button class="btn"         onclick="calcInput('6')">6</button>
-      <button class="btn op"      onclick="calcInput('-')">−</button>
-
-      <button class="btn"         onclick="calcInput('1')">1</button>
-      <button class="btn"         onclick="calcInput('2')">2</button>
-      <button class="btn"         onclick="calcInput('3')">3</button>
-      <button class="btn op"      onclick="calcInput('+')">+</button>
-
-      <button class="btn zero"    onclick="calcInput('0')">0</button>
-      <button class="btn"         onclick="calcInput('.')">.</button>
-      <button class="btn equal"   onclick="calcEquals()">=</button>
-    </div>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-name">ResolveHub</span>
   </div>
+  <div class="brand-tag">One place to log it, one place to follow it up.</div>
+</header>
 
-  <!-- TASK 2: LOGIN -->
-  <div class="card">
-    <div class="card-title">Task 2 — Login</div>
+<main id="app">
 
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" id="username" placeholder="Enter username" oninput="clearErrors()"/>
-      <div class="error-msg" id="err-user">Username is required.</div>
+  <!-- ROLE SELECT -->
+  <section id="view-landing" class="view active">
+    <h1>Who's this for?</h1>
+    <p class="lede">Choose how you'll use ResolveHub. Each role sees a different set of tools.</p>
+    <div class="role-grid">
+      <button class="role-card" data-role="student" style="--role-color:#B6842A">
+        <h2>Student</h2>
+        <p>Create an account, log an issue, and follow it through to resolution.</p>
+      </button>
+      <button class="role-card" data-role="indigene" style="--role-color:#276B5A">
+        <h2>Indigene</h2>
+        <p>Browse issues already raised across the community, with live status.</p>
+      </button>
+      <button class="role-card" data-role="admin" style="--role-color:#A83E29">
+        <h2>Administrator</h2>
+        <p>Sign in to review every report, move it forward, or close it out.</p>
+      </button>
     </div>
+  </section>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Enter password" oninput="clearErrors()"/>
-      <div class="error-msg" id="err-pass">Password must be at least 6 characters.</div>
+  <!-- STUDENT: REGISTER -->
+  <section id="view-student-register" class="view">
+    <button class="back-btn" data-back="landing">&larr; back</button>
+    <h1>Create your account</h1>
+    <p class="lede">Takes a minute — you'll need it to log and follow issues.</p>
+    <form id="form-register" class="panel">
+      <label>Full name
+        <input type="text" id="reg-name" required placeholder="e.g. Chidera Nwosu">
+      </label>
+      <label>Email
+        <input type="email" id="reg-email" required placeholder="you@aaua.edu.ng">
+      </label>
+      <label>Password
+        <input type="password" id="reg-password" required minlength="4">
+      </label>
+      <button type="submit" class="primary-btn">Create account</button>
+      <p class="switch-line">Already have one? <a href="#" data-goto="student-login">Sign in</a></p>
+    </form>
+  </section>
+
+  <!-- STUDENT: LOGIN -->
+  <section id="view-student-login" class="view">
+    <button class="back-btn" data-back="landing">&larr; back</button>
+    <h1>Sign in</h1>
+    <form id="form-student-login" class="panel">
+      <label>Email
+        <input type="email" id="login-email" required placeholder="you@aaua.edu.ng">
+      </label>
+      <label>Password
+        <input type="password" id="login-password" required>
+      </label>
+      <button type="submit" class="primary-btn">Sign in</button>
+      <p class="switch-line">New here? <a href="#" data-goto="student-register">Create an account</a></p>
+      <p class="hint">demo note — nothing is saved once you close the tab; create an account first.</p>
+    </form>
+  </section>
+
+  <!-- STUDENT: DASHBOARD -->
+  <section id="view-student-dashboard" class="view">
+    <button class="back-btn" data-back="landing">&larr; sign out</button>
+    <h1>Welcome back, <span id="student-name-tag"></span></h1>
+    <p class="lede">Log a new issue, or check where your earlier ones stand.</p>
+
+    <div class="dash-grid">
+      <div class="panel">
+        <h2>Log an issue</h2>
+        <form id="form-ticket">
+          <label>What's the issue?
+            <input type="text" id="tk-title" required placeholder="e.g. No streetlights on Hostel Road">
+          </label>
+          <label>Category
+            <select id="tk-category" required>
+              <option value="">Choose one&hellip;</option>
+              <option value="Roads">Roads &amp; transport</option>
+              <option value="Power">Power &amp; water</option>
+              <option value="Security">Security</option>
+              <option value="Campus">Campus facilities</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          <label>Details
+            <textarea id="tk-desc" rows="3" required placeholder="Tell us what's happening"></textarea>
+          </label>
+          <button type="submit" class="primary-btn">Log issue</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>Your issues</h2>
+        <div id="student-ticket-list" class="report-list"></div>
+      </div>
     </div>
+  </section>
 
-    <div class="btn-row">
-      <button class="btn-login" onclick="doLogin()">Login</button>
-      <button class="btn-reset" onclick="doReset()">Reset</button>
+  <!-- INDIGENE: BROWSE -->
+  <section id="view-indigene-track" class="view">
+    <button class="back-btn" data-back="landing">&larr; back</button>
+    <h1>What's been reported</h1>
+    <p class="lede">Every issue raised by students and residents, and where it stands today.</p>
+    <div id="indigene-ticket-list" class="report-list wide"></div>
+  </section>
+
+  <!-- ADMIN: LOGIN -->
+  <section id="view-admin-login" class="view">
+    <button class="back-btn" data-back="landing">&larr; back</button>
+    <h1>Administrator sign in</h1>
+    <form id="form-admin-login" class="panel">
+      <label>Username
+        <input type="text" id="admin-user" required placeholder="admin">
+      </label>
+      <label>Password
+        <input type="password" id="admin-pass" required placeholder="admin">
+      </label>
+      <button type="submit" class="primary-btn">Sign in</button>
+      <p class="hint">demo credentials — admin / admin</p>
+    </form>
+  </section>
+
+  <!-- ADMIN: DASHBOARD -->
+  <section id="view-admin-dashboard" class="view">
+    <button class="back-btn" data-back="landing">&larr; sign out</button>
+    <h1>Administrator dashboard</h1>
+    <p class="lede">Every report in one place. Move a status forward, or close a report once it's settled.</p>
+
+    <div class="admin-stats" id="admin-stats"></div>
+
+    <div class="panel wide">
+      <h2>All reports</h2>
+      <div id="admin-ticket-list" class="report-list"></div>
     </div>
+  </section>
 
-    <div class="alert success" id="alert-ok">✓ Login successful! Welcome back.</div>
-    <div class="alert fail"    id="alert-fail">✗ Invalid credentials. Please try again.</div>
-  </div>
+</main>
 
-</div>
+<footer class="foot">ResolveHub — a lightweight demo interface. Nothing here leaves your browser tab.</footer>
 
 <script>
-  // ======= CALCULATOR =======
-  let expr = '';
+// ---- in-memory store (no backend — resets on reload) ----
+let users = [];
+let tickets = [];
+let activeUser = null;
+let ticketCounter = 1;
 
-  function calcInput(val) {
-    const display = document.getElementById('display');
-    if (display.textContent === '0' && val !== '.') expr = '';
-    expr += val;
-    display.textContent = expr;
-  }
+const panels = document.querySelectorAll('.view');
 
-  function calcClear() {
-    expr = '';
-    document.getElementById('display').textContent = '0';
-  }
+function navigateTo(id) {
+  panels.forEach(p => p.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  if (id === 'indigene-track') renderTickets('indigene-ticket-list', tickets, false);
+  if (id === 'student-dashboard') renderTickets('student-ticket-list', tickets.filter(t => t.owner === activeUser.email), false);
+  if (id === 'admin-dashboard') { renderTickets('admin-ticket-list', tickets, true); renderStats(); }
+}
 
-  function calcEquals() {
-    try {
-      let e = expr
-        .replace(/÷/g, '/')
-        .replace(/×/g, '*')
-        .replace(/(\d+(\.\d+)?)\^(\d+(\.\d+)?)/g, 'Math.pow($1,$3)');
-      let result = Function('"use strict"; return (' + e + ')')();
-      result = parseFloat(result.toFixed(10));
-      document.getElementById('display').textContent = result;
-      expr = String(result);
-    } catch {
-      document.getElementById('display').textContent = 'Error';
-      expr = '';
-    }
-  }
-
-  // Keyboard support
-  document.addEventListener('keydown', e => {
-    if (e.key >= '0' && e.key <= '9') calcInput(e.key);
-    else if (e.key === '+') calcInput('+');
-    else if (e.key === '-') calcInput('-');
-    else if (e.key === '*') calcInput('×');
-    else if (e.key === '/') { e.preventDefault(); calcInput('÷'); }
-    else if (e.key === '%') calcInput('%');
-    else if (e.key === '^') calcInput('^');
-    else if (e.key === '.') calcInput('.');
-    else if (e.key === 'Enter' || e.key === '=') calcEquals();
-    else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') calcClear();
-    else if (e.key === 'Backspace') {
-      expr = expr.slice(0, -1);
-      document.getElementById('display').textContent = expr || '0';
-    }
+document.querySelectorAll('.role-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const role = card.dataset.role;
+    if (role === 'student') navigateTo('student-login');
+    if (role === 'indigene') navigateTo('indigene-track');
+    if (role === 'admin') navigateTo('admin-login');
   });
+});
 
-  // ======= LOGIN =======
-  // Demo credentials
-  const VALID_USER = 'admin';
-  const VALID_PASS = 'password123';
+document.querySelectorAll('[data-back]').forEach(btn => {
+  btn.addEventListener('click', () => navigateTo(btn.dataset.back));
+});
 
-  function doLogin() {
-    let valid = true;
-    const u = document.getElementById('username');
-    const p = document.getElementById('password');
-    const eu = document.getElementById('err-user');
-    const ep = document.getElementById('err-pass');
+document.querySelectorAll('[data-goto]').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    navigateTo(link.dataset.goto);
+  });
+});
 
-    if (!u.value.trim()) {
-      u.classList.add('error'); eu.style.display = 'block'; valid = false;
-    }
-    if (p.value.length < 6) {
-      p.classList.add('error'); ep.style.display = 'block'; valid = false;
-    }
+// Create account
+document.getElementById('form-register').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const password = document.getElementById('reg-password').value;
 
-    if (!valid) return;
+  if (users.some(u => u.email === email)) {
+    alert('That email already has an account here — try signing in instead.');
+    return;
+  }
+  users.push({ name, email, password });
+  e.target.reset();
+  alert('Account created. You can sign in now.');
+  navigateTo('student-login');
+});
 
-    const ok = document.getElementById('alert-ok');
-    const fail = document.getElementById('alert-fail');
-    ok.style.display = 'none'; fail.style.display = 'none';
+// Student sign in
+document.getElementById('form-student-login').addEventListener('submit', e => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+  const match = users.find(u => u.email === email && u.password === password);
+  if (!match) {
+    alert("That doesn't match an account — check your details or create one first.");
+    return;
+  }
+  activeUser = match;
+  document.getElementById('student-name-tag').textContent = match.name;
+  e.target.reset();
+  navigateTo('student-dashboard');
+});
 
-    if (u.value.trim() === VALID_USER && p.value === VALID_PASS) {
-      ok.style.display = 'block';
-    } else {
-      fail.style.display = 'block';
-    }
+// Log a ticket
+document.getElementById('form-ticket').addEventListener('submit', e => {
+  e.preventDefault();
+  const title = document.getElementById('tk-title').value.trim();
+  const category = document.getElementById('tk-category').value;
+  const desc = document.getElementById('tk-desc').value.trim();
+
+  tickets.push({
+    id: ticketCounter++,
+    title, category, desc,
+    owner: activeUser.email,
+    ownerName: activeUser.name,
+    status: 'Open',
+    logged: new Date().toLocaleDateString()
+  });
+  e.target.reset();
+  renderTickets('student-ticket-list', tickets.filter(t => t.owner === activeUser.email), false);
+});
+
+// Admin sign in (demo credentials: admin / admin)
+document.getElementById('form-admin-login').addEventListener('submit', e => {
+  e.preventDefault();
+  const user = document.getElementById('admin-user').value.trim();
+  const pass = document.getElementById('admin-pass').value;
+  if (user !== 'admin' || pass !== 'admin') {
+    alert('Incorrect credentials — demo sign-in is admin / admin.');
+    return;
+  }
+  e.target.reset();
+  navigateTo('admin-dashboard');
+});
+
+function renderTickets(containerId, list, isAdmin) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+
+  if (list.length === 0) {
+    container.innerHTML = '<p class="empty-state">Nothing logged yet.</p>';
+    return;
   }
 
-  function doReset() {
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    clearErrors();
-    document.getElementById('alert-ok').style.display = 'none';
-    document.getElementById('alert-fail').style.display = 'none';
-  }
+  list.slice().reverse().forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'report-card';
+    const stampClass = t.status.replace(' ', '-');
 
-  function clearErrors() {
-    ['username','password'].forEach(id => document.getElementById(id).classList.remove('error'));
-    document.getElementById('err-user').style.display = 'none';
-    document.getElementById('err-pass').style.display = 'none';
-  }
+    card.innerHTML = `
+      <div style="display:flex; gap:14px; align-items:flex-start;">
+        <div class="stamp stamp-sm ${stampClass}">${t.status}</div>
+        <div style="flex:1;">
+          <h3>${escapeText(t.title)}</h3>
+          <p>${escapeText(t.desc)}</p>
+          <div class="report-meta">
+            <span class="tag">${categoryLabel(t.category)}</span>
+            <span style="font-size:0.78rem;color:var(--ink-soft)">${t.logged} &middot; ${escapeText(t.ownerName || 'Anonymous')}</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    if (isAdmin) {
+      const controls = document.createElement('div');
+      controls.className = 'admin-controls';
+
+      const select = document.createElement('select');
+      ['Open', 'In Review', 'Resolved'].forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        if (s === t.status) opt.selected = true;
+        select.appendChild(opt);
+      });
+      select.addEventListener('change', () => {
+        t.status = select.value;
+        renderTickets('admin-ticket-list', tickets, true);
+        renderStats();
+      });
+
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'small-btn';
+      closeBtn.textContent = 'Remove';
+      closeBtn.addEventListener('click', () => {
+        tickets = tickets.filter(item => item.id !== t.id);
+        renderTickets('admin-ticket-list', tickets, true);
+        renderStats();
+      });
+
+      controls.appendChild(select);
+      controls.appendChild(closeBtn);
+      card.appendChild(controls);
+    }
+
+    container.appendChild(card);
+  });
+}
+
+function categoryLabel(code) {
+  const map = { Roads: 'Roads & transport', Power: 'Power & water', Security: 'Security', Campus: 'Campus facilities', Other: 'Other' };
+  return map[code] || code;
+}
+
+function renderStats() {
+  const open = tickets.filter(t => t.status === 'Open').length;
+  const review = tickets.filter(t => t.status === 'In Review').length;
+  const resolved = tickets.filter(t => t.status === 'Resolved').length;
+  document.getElementById('admin-stats').innerHTML = `
+    <div class="stat"><span class="num">${tickets.length}</span><span class="lbl">total</span></div>
+    <div class="stat"><span class="num">${open}</span><span class="lbl">open</span></div>
+    <div class="stat"><span class="num">${review}</span><span class="lbl">in review</span></div>
+    <div class="stat"><span class="num">${resolved}</span><span class="lbl">resolved</span></div>
+  `;
+}
+
+function escapeText(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
 </script>
-
 </body>
 </html>
